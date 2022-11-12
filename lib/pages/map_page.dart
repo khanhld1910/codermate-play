@@ -30,7 +30,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 33, 32, 32),
-        title: const Text('Flutter MapBox'),
+        title: const Text('CoderMate - Explore'),
       ),
       body: Stack(
         children: [
