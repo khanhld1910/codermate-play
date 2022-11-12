@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:codermate_play/app_constants.dart';
 import 'package:codermate_play/helpers/location.dart';
-import 'package:codermate_play/map_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,13 +13,35 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
-  var currentLocation = AppConstants.testLocation;
+  // late LatLng currentLocation = AppConstants.testLocation;
   late final MapController mapController;
+  late LatLng currentLocation;
+  late Marker marker;
 
   @override
   void initState() {
     super.initState();
     mapController = MapController();
+    setCurrentPosition();
+  }
+
+  Future<void> setCurrentPosition() async {
+    Position myPosition = await LocationHelper.getCurrentLocation();
+    setState(() {
+      currentLocation = LatLng(myPosition.latitude, myPosition.longitude);
+      marker = Marker(
+        height: 40,
+        width: 40,
+        point: currentLocation,
+        builder: (_) {
+          return const Icon(
+            Icons.location_pin,
+            color: Colors.black,
+            size: 40,
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -40,7 +59,6 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
               minZoom: 10,
               maxZoom: 18,
               zoom: 13,
-              // center: LatLng(16.0954879, 108.2496562), // get user's current location
               center: currentLocation, // get user's current location
             ),
             children: [
@@ -48,39 +66,19 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                 urlTemplate: AppConstants.mapBoxUrlTemplate,
               ),
               MarkerLayer(
-                markers: [
-                  for (int i = 0; i < mapMarkers.length; i++)
-                    Marker(
-                      height: 40,
-                      width: 40,
-                      point: mapMarkers[i].location ?? AppConstants.myLocation,
-                      builder: (_) {
-                        return GestureDetector(
-                          onTap: () async {
-                            // inspect(mapMarkers[i]);
-                            currentLocation = mapMarkers[i].location ??
-                                AppConstants.testLocation;
-
-                            _animatedMapMove(currentLocation, 13);
-
-                            Position loc =
-                                await LocationHelper.getCurrentLocation();
-                            inspect(loc);
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: Colors.brown.shade800,
-                            child: Text(
-                              mapMarkers[i].shortName ?? 'Un',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                ],
+                markers: [marker],
               )
             ],
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          await setCurrentPosition();
+          _animatedMapMove(currentLocation, 13);
+        },
+        label: const Text('My Location'),
+        icon: const Icon(Icons.location_pin),
       ),
     );
   }
