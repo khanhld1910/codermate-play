@@ -1,3 +1,4 @@
+import 'package:codermate_play/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart'; // Suitable for most situations
@@ -19,38 +20,33 @@ class MyApp extends StatelessWidget {
           title: const Text('My First Map'),
         ),
         body: const Center(
-          child: RandomWords(),
+          child: MyMap(),
         ),
       ),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
-  const RandomWords({super.key});
+class MyMap extends StatefulWidget {
+  const MyMap({super.key});
 
   @override
-  State<RandomWords> createState() => _RandomWordsState();
+  State<MyMap> createState() => _MyMapState();
 }
 
-class _RandomWordsState extends State<RandomWords> {
+class _MyMapState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(51.509364, -0.128928),
-        zoom: 9.2,
+        minZoom: 11,
+        maxZoom: 18,
+        zoom: 14,
+        center: LatLng(16.0954879, 108.2496562), // get user's current location
       ),
-      nonRotatedChildren: [
-        AttributionWidget.defaultWidget(
-          source: 'OpenStreetMap contributors',
-          onSourceTapped: null,
-        ),
-      ],
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
+          urlTemplate: AppConstants.mapBoxUrlTemplate,
         ),
       ],
     );
