@@ -9,4 +9,5 @@ class AppConstants {
       'https://api.mapbox.com/styles/v1/$mapBoxUsername/$mapBoxStyleId/tiles/256/{z}/{x}/{y}@2x?access_token=$mapBoxAccessToken';
 
   static final myLocation = LatLng(16.0954879, 108.2496562);
+  static final testLocation = LatLng(51.5090214, -0.1982948);
 }
