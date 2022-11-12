@@ -39,15 +39,43 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        minZoom: 11,
+        minZoom: 10,
         maxZoom: 18,
-        zoom: 14,
+        zoom: 12,
         center: LatLng(16.0954879, 108.2496562), // get user's current location
       ),
       children: [
         TileLayer(
           urlTemplate: AppConstants.mapBoxUrlTemplate,
         ),
+        MarkerLayer(
+          markers: [
+            // current user
+            Marker(
+                point: AppConstants.myLocation,
+                builder: (_) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      backgroundColor: Colors.brown.shade800,
+                      child: const Text('Me'),
+                    ),
+                  );
+                }),
+            // other person
+            Marker(
+                point: LatLng(16.1, 108.245),
+                builder: (_) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      backgroundColor: Colors.brown.shade800,
+                      child: const Text('AH'),
+                    ),
+                  );
+                })
+          ],
+        )
       ],
     );
   }
