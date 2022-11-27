@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:codermate_play/app_constants.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -11,13 +12,14 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(45.521563, -122.677433);
+  final Map<String, Marker> _markers = AppConstants.mySamplePlaces;
 
   @override
   void initState() {
     super.initState();
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  Future<void> _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
   }
 
@@ -36,6 +38,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
               target: _center,
               zoom: 13.0,
             ),
+            markers: _markers.values.toSet(),
           ),
         ],
       ),
