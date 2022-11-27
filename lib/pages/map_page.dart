@@ -33,8 +33,8 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             mapController: mapController,
             options: MapOptions(
               minZoom: 10,
-              maxZoom: 18,
-              zoom: 13,
+              maxZoom: 22,
+              zoom: 14,
               center: currentLocation, // get user's current location
             ),
             children: [
