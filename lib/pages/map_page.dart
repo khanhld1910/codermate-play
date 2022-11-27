@@ -32,8 +32,8 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              minZoom: 10,
-              maxZoom: 22,
+              minZoom: 1,
+              maxZoom: 21,
               zoom: 14,
               center: currentLocation, // get user's current location
             ),
@@ -41,6 +41,8 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
               TileLayer(
                 urlTemplate: AppConstants.mapBoxUrlTemplate,
                 retinaMode: MediaQuery.of(context).devicePixelRatio > 1.0,
+                maxZoom: 22,
+                minZoom: 0,
               ),
             ],
           ),
