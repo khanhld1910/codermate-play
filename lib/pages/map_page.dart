@@ -49,7 +49,16 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                   target: LatLng(position.latitude, position.longitude),
                   zoom: 13.0,
                 ),
-                markers: _markers.values.toSet(),
+                // markers: _markers.values.toSet(),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId('my_location'),
+                    position: LatLng(position.latitude, position.longitude),
+                    icon: BitmapDescriptor.defaultMarker,
+                    infoWindow: const InfoWindow(title: "My Location"),
+                    draggable: false,
+                  )
+                },
               );
             },
           ),
