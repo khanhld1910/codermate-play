@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:codermate_play/app_constants.dart';
+import 'package:codermate_play/helpers/location.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -11,7 +13,6 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
   final Map<String, Marker> _markers = AppConstants.mySamplePlaces;
 
   @override
@@ -32,13 +33,25 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       ),
       body: Stack(
         children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 13.0,
-            ),
-            markers: _markers.values.toSet(),
+          FutureBuilder(
+            future: LocationHelper.getCurrentLocation(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: Text("Loading map. Please Wait ... ..."),
+                );
+              }
+
+              Position position = snapshot.data as Position;
+              return GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(position.latitude, position.longitude),
+                  zoom: 13.0,
+                ),
+                markers: _markers.values.toSet(),
+              );
+            },
           ),
         ],
       ),
